@@ -13,15 +13,15 @@ model = tf.keras.Sequential([layer])
 
 
 # to extract features from the images
-def get_features(file):
+def get_features(img):
     # load image and resize to the model's standard shape
-    file = Image.open(file).convert('L').resize(IMAGE_SHAPE)
+    img = Image.open(img).convert('L').resize(IMAGE_SHAPE)
     # extract the 3-dimensions
-    file = np.stack((file,) * 3, axis=-1)
+    img = np.stack((img,) * 3, axis=-1)
     # normalize the values to 0-1
-    file = np.array(file) / 255.0
+    img = np.array(img) / 255.0
     # get visual representation, extract the features
-    embedding = model.predict(file[np.newaxis, ...])
+    embedding = model.predict(img[np.newaxis, ...])
     feature = np.array(embedding)
     # flattened to one dimension
     flattened_feature = feature.flatten()

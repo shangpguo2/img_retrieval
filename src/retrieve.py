@@ -7,7 +7,7 @@ from scipy.spatial import distance
 database_dir = "image.orig/datasets"
 
 
-# abandoned
+# # abandoned
 # # Compute pixel-by-pixel difference and return the sum
 # def compareImgs(img1, img2):
 #     # resize img2 to img1
