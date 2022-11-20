@@ -1,12 +1,10 @@
 import pickle
-import cv2
 from glob import glob
+
 from scipy.spatial import distance
 
 # the directory of the image database
 database_dir = "image.orig/datasets"
-# the directory of the output images
-out_dir = "out/"
 
 
 # abandoned
@@ -324,10 +322,9 @@ out_dir = "out/"
 def dl(choice):
     with open("features/" + choice[:-3] + "pkl", 'rb') as f:
         src = pickle.load(f)
-    src_input = cv2.imread("image.orig/examples/" + choice)
+    # src_input = cv2.imread("image.orig/examples/" + choice)
     min_dc = 1e50
 
-    cv2.imshow("Input", src_input)
     # read image database
     database = sorted(glob(database_dir + "/*.jpg"))
     metric = 'cosine'
@@ -335,51 +332,51 @@ def dl(choice):
 
     for img in database:
         # read image
-        img_rgb = cv2.imread(img)
-        with open("features/"+img[19:-3]+"pkl", 'rb') as f:
+        # img_rgb = cv2.imread(img)
+        with open("features/" + img[19:-3] + "pkl", 'rb') as f:
             dc = distance.cdist([src], [pickle.load(f)], metric)[0]
         record.append([img, dc])
         print(img, dc)
 
         # find the minimum difference
         if dc < min_dc:
-            # update the minimum difference
+            # update the minimum distance
             min_dc = dc
             # update the most similar image
-            closest_img = img_rgb
+            # closest_img = img_rgb
             result = img
-    record.sort(key=lambda x: x[1])
-    for i in range(100):
-        cv2.imwrite(out_dir+record[i][0][19:], cv2.imread(record[i][0]))
-    print("the most similar image is %s, the pixel-by-pixel difference is %f " % (result, min_dc))
-    print("\n")
+    return result, record
+    # record.sort(key=lambda x: x[1])
+    # for i in range(100):
+    #     cv2.imwrite(out_dir+record[i][0][19:], cv2.imread(record[i][0]))
+    # print("the most similar image is %s, the pixel-by-pixel difference is %f " % (result, min_dc))
+    # print("\n")
 
-    cv2.imshow("Result", closest_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow("Result", closest_img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
 
-def main():
-    print("1: Image retrieval demo")
+def retrieve(choice):
+    # print("1: Image retrieval demo")
 
-    # to simplify if clauses
-    dic = {1: "beach.jpg", 2: "building.jpg", 3: "bus.jpg", 4: "dinosaur.jpg",
-           5: "flower.jpg", 6: "horse.jpg", 7: "man.jpg"}
+    # # to simplify if clauses
+    # dic = {1: "beach.jpg", 2: "building.jpg", 3: "bus.jpg", 4: "dinosaur.jpg",
+    #        5: "flower.jpg", 6: "horse.jpg", 7: "man.jpg"}
 
-    print("1: beach")
-    print("2: building")
-    print("3: bus")
-    print("4: dinosaur")
-    print("5: flower")
-    print("6: horse")
-    print("7: man")
-    choice = eval(input("Type in the number to choose a category and type enter to confirm\n"))
+    # print("1: beach")
+    # print("2: building")
+    # print("3: bus")
+    # print("4: dinosaur")
+    # print("5: flower")
+    # print("6: horse")
+    # print("7: man")
+    # choice = eval(input("Type in the number to choose a category and type enter to confirm\n"))
 
-    print("You choose: %s\n" % dic[choice])
+    # print("You choose: %s\n" % dic[choice])
 
-    dl(dic[choice])
+    dl(choice)
     # ssim(dic[choice])
 
-
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     retrieve()
